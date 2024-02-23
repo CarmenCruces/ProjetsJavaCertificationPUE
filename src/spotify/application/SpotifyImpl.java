@@ -3,6 +3,11 @@ package spotify.application;
 import spotify.domain.Playlist;
 import spotify.domain.Track;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 //import java.util.function.Function;
@@ -295,6 +300,7 @@ public class SpotifyImpl implements Spotify {
     //---------------------------------FUNCIONAL
 /*    @Override
     public List<String> getTopArtists(Playlist playlist) {
+
         Map<String, Long> artistCounts = map.getOrDefault(playlist, Collections.emptyList()).stream()
                 .flatMap(track -> track.getArtists().stream())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -304,5 +310,90 @@ public class SpotifyImpl implements Spotify {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }*/
+
+    @Override
+    public List<String> getGenresByFrequency(Playlist playlist) {
+        Map<String, Integer> genreFrequency = new HashMap<>();
+
+        List<Track> tracks = map.getOrDefault(playlist, Collections.emptyList());
+        for (Track track : tracks) {
+            for (String genre : track.getGenres()) {
+                genreFrequency.put(genre, genreFrequency.getOrDefault(genre, 0) + 1);
+            }
+        }
+
+        List<Map.Entry<String, Integer>> sortedGenres = new ArrayList<>(genreFrequency.entrySet());
+        sortedGenres.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
+
+        List<String> genresByFrequency = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : sortedGenres) {
+            genresByFrequency.add(entry.getKey());
+        }
+
+        return genresByFrequency;
+    }
+
+/*    @Override
+    public int getAllPlaylists() {
+        return 0;
+    }*/
+
+    //-----------------------FUNCIONAL
+
+/*    @Override
+    public List<String> getGenresByFrequency(Playlist playlist) {
+        List<Track> tracks = map.getOrDefault(playlist, Collections.emptyList());
+
+        Map<String, Long> genreFrequency = tracks.stream()
+                .flatMap(track -> track.getGenres().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        List<String> genresByFrequency = genreFrequency.entrySet().stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
+        return genresByFrequency;
+    }*/
+    //-----------------------FUNCIONAL TO LIST<PLAYLIST>
+
+/*    @Override
+    public Map<String, Long> getGenresByFrequency(List<Playlist> playlists) {
+        return playlists.stream()
+                .flatMap(playlist -> map.getOrDefault(playlist, Collections.emptyList()).stream())
+                .flatMap(track -> track.getGenres().stream())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }*/
+
+    //URLS AND JDK JAVA
+
+    @Override
+    public String getAlbumInfo(String albumId) throws IOException {
+        // URL de la API de Spotify para obtener información de un álbum
+        String urlString = "https://api.spotify.com/v1/albums/" + albumId;
+
+        // Crear un objeto URL
+        URL url = new URL(urlString);
+
+        // Abrir una conexión HTTP
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Establecer el método de solicitud
+        connection.setRequestMethod("GET");
+
+        // Leer la respuesta
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        String line;
+        StringBuilder response = new StringBuilder();
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        // Cerrar la conexión
+        connection.disconnect();
+
+        return response.toString();
+    }
 
 }

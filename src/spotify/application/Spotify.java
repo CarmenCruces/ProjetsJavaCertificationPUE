@@ -4,14 +4,17 @@ package spotify.application;
 import spotify.domain.Playlist;
 import spotify.domain.Track;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+
 /*Como obtener la canción con duración máxima, mínima y la media de duración de una playlist.
         -Introducir nuevas estructuras como el set y el TreeSet para colecciones sin repetidos.
-        -Practicar con la obtención de artistas y géneros de una playlist sin repeticiones y luego ordenados pero alfabeticamente con el TreeSet.
+        -Practicar con la obtención de artistas y géneros de una playlist sin repeticiones y luego ordenados
+          pero alfabeticamente con el TreeSet.
         -Realizar ejercicios más avanzados, como clasificar géneros por ocurrencia en una playlist.
         -Trabajar con fechas para realizar búsquedas.
         -Implementar la reproducción de canciones mediante URLs con el JDK de Java.
@@ -52,5 +55,12 @@ public interface Spotify {
     // una lista de canciones y asu vez tiene su lista de artistas, por tanto hay que explorar todas las playlist
     // de cada una todas las canciones y de cada una todos los artistas. finalmente devolver una lista de artistas
     // ordenados de mayor a menor por el nivel de participacion en la playlist
-    List<String> getTopArtists(Playlist playlist); // artistas mas repetido de la playlist !!  chungo ¡¡¡
+    List<String> getTopArtists(Playlist playlist);
+
+    List<String> getGenresByFrequency(Playlist playlist);
+
+   // int getAllPlaylists();
+
+    //URLS AND JDK JAVA
+    String getAlbumInfo(String albumId) throws IOException;
 }

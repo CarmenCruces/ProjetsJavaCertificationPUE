@@ -4,6 +4,7 @@ import spotify.domain.Playlist;
 import spotify.domain.Track;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -180,6 +181,24 @@ public class Main {
         System.out.println("Top Artists: " + topArtists);
 
         System.out.println("---------------------------------------------");
+
+        List<String> genresByFrequency = spotify.getGenresByFrequency(playlist1);
+
+        System.out.println("Genres by frequency:");
+        for (String genre : genresByFrequency) {
+            System.out.println(genre);
+        }
+        //--------------TO LIST<PLAYLIST> in progress
+
+ /*       List<Playlist> playlists = new ArrayList<>(spotify.getAllPlaylists());
+
+        List<String> genresByFrequency = spotify.getGenresByFrequency(playlists);
+
+        System.out.println("Genres by frequency:");
+        for (String genre : genresByFrequency) {
+            System.out.println(genre);
+        }*/
+
 
     }
 
