@@ -199,6 +199,10 @@ public class Main {
             System.out.println(genre);
         }*/
 
+        Spotify spotify = new SpotifyImpl();
+        String albumInfo = spotify.getAlbumInfo("0sNOF9WDwhWunNAHPD3Baj");
+        System.out.println(albumInfo);
+
 
     }
 
